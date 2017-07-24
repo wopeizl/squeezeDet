@@ -102,26 +102,32 @@ class ModelSkeleton:
       name='iou', dtype=tf.float32
     )
 
-    self.FIFOQueue = tf.FIFOQueue(
-        capacity=mc.QUEUE_CAPACITY,
-        dtypes=[tf.float32, tf.float32, tf.float32, 
-                tf.float32, tf.float32],
-        shapes=[[mc.IMAGE_HEIGHT, mc.IMAGE_WIDTH, 3],
-                [mc.ANCHORS, 1],
-                [mc.ANCHORS, 4],
-                [mc.ANCHORS, 4],
-                [mc.ANCHORS, mc.CLASSES]],
-    )
+    # self.FIFOQueue = tf.FIFOQueue(
+    #     capacity=mc.QUEUE_CAPACITY,
+    #     dtypes=[tf.float32, tf.float32, tf.float32,
+    #             tf.float32, tf.float32],
+    #     shapes=[[mc.IMAGE_HEIGHT, mc.IMAGE_WIDTH, 3],
+    #             [mc.ANCHORS, 1],
+    #             [mc.ANCHORS, 4],
+    #             [mc.ANCHORS, 4],
+    #             [mc.ANCHORS, mc.CLASSES]],
+    # )
+    #
+    # self.enqueue_op = self.FIFOQueue.enqueue_many(
+    #     [self.ph_image_input, self.ph_input_mask,
+    #      self.ph_box_delta_input, self.ph_box_input, self.ph_labels]
+    # )
+    #
+    # self.image_input, self.input_mask, self.box_delta_input, \
+    #     self.box_input, self.labels = tf.train.batch(
+    #         self.FIFOQueue.dequeue(), batch_size=mc.BATCH_SIZE,
+    #         capacity=mc.QUEUE_CAPACITY)
 
-    self.enqueue_op = self.FIFOQueue.enqueue_many(
-        [self.ph_image_input, self.ph_input_mask,
-         self.ph_box_delta_input, self.ph_box_input, self.ph_labels]
-    )
-
-    self.image_input, self.input_mask, self.box_delta_input, \
-        self.box_input, self.labels = tf.train.batch(
-            self.FIFOQueue.dequeue(), batch_size=mc.BATCH_SIZE,
-            capacity=mc.QUEUE_CAPACITY) 
+    self.image_input = self.ph_image_input
+    self.input_mask = self.ph_input_mask
+    self.box_delta_input = self.ph_box_delta_input
+    self.box_input = self.ph_box_input
+    self.labels = self.ph_labels
 
     # model parameters
     self.model_params = []

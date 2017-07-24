@@ -232,8 +232,9 @@ def train():
             print ("added to the queue")
         if mc.DEBUG_MODE:
           print ("Finished enqueue")
-      except Exception, e:
-        coord.request_stop(e)
+      except Exception:
+        # coord.request_stop(e)
+        pass
 
     sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True))
 
